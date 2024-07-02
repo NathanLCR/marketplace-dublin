@@ -1,3 +1,4 @@
+"use-client";
 import { login } from "@/actions/user-actions";
 import { displayError } from "@/util/toast-util";
 import { Button } from "@nextui-org/button"
@@ -15,7 +16,6 @@ export default function Login() {
     }
     const handleLogin = async (formData: FieldValues) => {
         try {
-            console.log("e");
             await login(formData)
         } catch(e) {
             console.error(e);
@@ -32,11 +32,14 @@ export default function Login() {
                          className="mb-4" variant="bordered"
                           radius="sm"
                           isInvalid={!!errors.email}
+                          errorMessage={errors.email?.message}
                             {...register('email', { required: 'Email is required', pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' } })}/>
                         <Input label="Password"
                         variant="bordered"
                         type={isVisible ? "text" : "password"}
                         radius="sm"
+                        isInvalid={!!errors.password}
+                        errorMessage={errors.password?.message}
                         endContent={
                             <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                               {isVisible ? (
@@ -46,9 +49,9 @@ export default function Login() {
                               )}
                             </button>
                           }
-                        className="mb-6 bg-white"
+                        className="mb-6"
                         {...register('password', {required: 'Password is required'})}/>
-                        <Button className="w-full p-2" size="lg" color="primary" radius="sm">Login</Button>
+                        <Button type="submit" className="w-full p-2" size="lg" color="primary" radius="sm">Login</Button>
                     </form>
                 </CardBody>
                 <CardFooter className="flex flex-col items-center justify-center ">

@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
@@ -23,7 +23,6 @@ export async function logout() {
 }
 
 export const login = async (formData: FieldValues) => {
-    'use server'
     const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "post",
         headers: {
@@ -38,7 +37,7 @@ export const login = async (formData: FieldValues) => {
         const token = data.token;
         const cookieStore = cookies()
         cookieStore.set('token', token, { expires: Date.now() + data.expiresIn});
-        redirect("/home");
+        redirect("/");
     } else {
         const message = await response.text();
         throw new Error(message);

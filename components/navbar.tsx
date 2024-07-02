@@ -29,6 +29,8 @@ import { Avatar } from "@nextui-org/avatar";
 import { ProfileMenu } from "./profile-menu";
 import { Select, SelectItem } from "@nextui-org/select";
 import { FaBaby, FaBook, FaChair, FaLaptop, FaTshirt } from "react-icons/fa";
+import { getUserAuthenticated } from "@/actions/user-actions";
+import { useState } from "react";
 
 const categories = [
   { name: 'Electronics', icon: <FaLaptop /> },
@@ -39,9 +41,6 @@ const categories = [
 ];
 
 export const Navbar = () => {
-  // const SearchInput = (
-    
-  // );
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky" isBordered>
