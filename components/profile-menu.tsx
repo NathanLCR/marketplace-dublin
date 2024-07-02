@@ -1,13 +1,30 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getUserAuthenticated } from "@/actions/user-actions";
 
-export const ProfileMenu = () => {
-  // const [user, setUser] = useState(null);
-  const user = null;
+const LoggedActions = () => {
+  return <>
+        <DropdownItem key="profile" className="h-14 gap-2">
+          <p className="font-semibold">Signed in as</p>
+          <p className="font-semibold">zoey@example.com</p>
+        </DropdownItem>
+        {/* <DropdownItem key="settings">My Settings</DropdownItem> */}
+        <DropdownItem key="configurations">Configurations</DropdownItem>
+        <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+        <DropdownItem key="logout" color="danger">
+        Log Out
+      </DropdownItem>
+    </>;
+}
 
-  // getUserAuthenticated().then(user => setUser(user));
+export const ProfileMenu = () => {
+  const [user, setUser] = useState(null);
+  const [isLogged,  setIsLogged] = useState(true);
+
+  useEffect(() => {
+    getUserAuthenticated().then(user => {setUser(user)});
+  }, [])
 
   return (
   <Dropdown placement="bottom-end">
@@ -23,16 +40,15 @@ export const ProfileMenu = () => {
               />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
-            </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
-            </DropdownItem>
+            {!user &&
+            <>
+             <DropdownItem key="login">Login</DropdownItem>
+             <DropdownItem key="signUp">Sign Up</DropdownItem>
+             </>
+             }
+            {isLogged &&
+              <LoggedActions></LoggedActions>
+            }
           </DropdownMenu>
         </Dropdown>);
 }

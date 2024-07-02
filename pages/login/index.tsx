@@ -1,4 +1,3 @@
-"use-client";
 import { login } from "@/actions/user-actions";
 import { displayError } from "@/util/toast-util";
 import { Button } from "@nextui-org/button"
@@ -7,6 +6,7 @@ import { Input } from "@nextui-org/input"
 import { useState } from "react"
 import { FieldValues, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { redirect } from 'next/navigation'
 
 export default function Login() {
     const [isVisible, changeVisible] = useState(false);
@@ -17,8 +17,10 @@ export default function Login() {
     const handleLogin = async (formData: FieldValues) => {
         try {
             await login(formData)
+            redirect("/");
         } catch(e) {
             console.error(e);
+            
             displayError(e as Error);
         }
     }

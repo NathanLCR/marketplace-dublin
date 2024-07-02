@@ -1,28 +1,32 @@
 "use server";
 
-import { redirect } from 'next/navigation';
-import { cookies, headers } from 'next/headers';
+import { redirect, useRouter } from 'next/navigation'
 import { error } from 'console';
 import { FieldValues } from 'react-hook-form';
 import { BASE_URL } from '@/util/constants';
+import { getCookie, setCookie } from 'cookies-next';
 
 export async function getUserAuthenticated() {
-    const sessionCookies = cookies();
-    const token = sessionCookies.get('token');
+    // const sessionCookies = cookies();
+    // const token = sessionCookies.get('token');
+    const token = getCookie('token');
     if (!token || token === null) {
         return null
     }
-    const response = await fetch(`${BASE_URL}/user/v1/me`, {headers: {"Authorization": `Bearer ${token.value}`}});
+    const response = await fetch(`${BASE_URL}/user/v1/me`, {headers: {"Authorization": `Bearer ${token}`}});
     const user = await response.json();
+    console.log(user);
     return user;
 }
 export async function logout() {
-    const sessionCookies = cookies();
-    sessionCookies.delete("token");
-    redirect("/home");
+    // const sessionCookies = cookies();
+    // sessionCookies.delete("token");
+    const router = useRouter()
+    router.push("/")
 }
 
 export const login = async (formData: FieldValues) => {
+    'use server';
     const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "post",
         headers: {
@@ -35,9 +39,9 @@ export const login = async (formData: FieldValues) => {
     if (response.ok) {
         const data = await response.json();
         const token = data.token;
-        const cookieStore = cookies()
-        cookieStore.set('token', token, { expires: Date.now() + data.expiresIn});
-        redirect("/");
+        // const cookieStore = cookies()
+        setCookie('token', token, { expiresIn: Date.now() + data.expiresIn});
+        // redirect("/");
     } else {
         const message = await response.text();
         throw new Error(message);
@@ -64,7 +68,8 @@ export const signUp = async(formData: FieldValues) => {
     if (response.ok) {
         const data = await response.json();
         const token = data.token;
-        redirect("/login");
+        const router = useRouter()
+        router.push("/login")
     } else {
         const message = await response.text();
         throw new Error(message);
