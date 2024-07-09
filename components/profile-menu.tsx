@@ -20,11 +20,27 @@ const LoggedActions = () => {
 
 export const ProfileMenu = () => {
   const [user, setUser] = useState(null);
-  const [isLogged,  setIsLogged] = useState(true);
 
   useEffect(() => {
     getUserAuthenticated().then(user => {setUser(user)});
   }, [])
+
+  const isLogged = () => {
+    return !!user;
+  }
+
+  const menuActionsUnloggedUser = () => {
+    return (<DropdownMenu aria-label="Profile Actions" variant="flat">
+      <DropdownItem key="login">Login</DropdownItem>
+    <DropdownItem key="signup">SignUp</DropdownItem>
+    </DropdownMenu>)
+  };
+  const menuActionsLoggedUser = () => {
+    return (<DropdownMenu aria-label="Profile Actions" variant="flat">
+      <DropdownItem key="asd">dsa</DropdownItem>
+    <DropdownItem key="login">321</DropdownItem>
+    </DropdownMenu>)
+  };
 
   return (
   <Dropdown placement="bottom-end">
@@ -39,16 +55,13 @@ export const ProfileMenu = () => {
                 // src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
               />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            {!user &&
-            <>
-             <DropdownItem key="login">Login</DropdownItem>
-             <DropdownItem key="signUp">Sign Up</DropdownItem>
-             </>
-             }
-            {isLogged &&
-              <LoggedActions></LoggedActions>
-            }
-          </DropdownMenu>
+
+          {isLogged() ? (
+              menuActionsLoggedUser()
+             ) :
+             (
+              menuActionsUnloggedUser()
+             )
+          }
         </Dropdown>);
 }

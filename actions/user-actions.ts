@@ -7,8 +7,6 @@ import { BASE_URL } from '@/util/constants';
 import { getCookie, setCookie } from 'cookies-next';
 
 export async function getUserAuthenticated() {
-    // const sessionCookies = cookies();
-    // const token = sessionCookies.get('token');
     const token = getCookie('token');
     if (!token || token === null) {
         return null
@@ -19,8 +17,6 @@ export async function getUserAuthenticated() {
     return user;
 }
 export async function logout() {
-    // const sessionCookies = cookies();
-    // sessionCookies.delete("token");
     const router = useRouter()
     router.push("/")
 }
